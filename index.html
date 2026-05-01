@@ -3,258 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Волга.Аренда Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Волга.Аренда Premium Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --premium-dark: #1a2a3a;
-            --premium-gold: #c5a059;
-            --premium-bg: #f8f7f5; /* Благородный Greige */
-            --premium-accent: #2c5282; /* Цвет глубокого моря */
-            --success: #48bb78;
-            --white: #ffffff;
+            --p-dark: #1A202C; /* Глубокий темный для текста */
+            --p-gold: #B79455; /* Золотой акцент */
+            --p-blue: #2C5282; /* Глубокий синий */
+            --p-bg: #F7FAFC;
+            --white: #FFFFFF;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
         body { 
-            margin: 0; 
-            padding: 20px 15px; 
-            background-color: var(--premium-bg); 
-            font-family: 'Montserrat', sans-serif;
-            color: var(--premium-dark);
+            margin: 0; padding: 20px 10px; 
+            background-color: #E2E8F0; 
+            font-family: 'Montserrat', sans-serif; color: var(--p-dark);
         }
 
         .app-container {
-            max-width: 420px;
-            margin: 0 auto;
-            background: var(--white);
-            padding: 30px 25px;
-            border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            max-width: 450px; margin: 0 auto;
+            background: var(--white); padding: 25px;
+            border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        h1 { 
-            font-family: 'Playfair Display', serif;
-            font-size: 26px;
-            text-align: center;
-            margin: 0 0 5px 0;
-            letter-spacing: 1px;
-        }
+        h1 { font-family: 'Playfair Display', serif; text-align: center; margin: 0; font-size: 28px; }
+        .subtitle { text-align: center; font-size: 11px; color: var(--p-gold); letter-spacing: 2px; font-weight: 600; margin-bottom: 25px; }
 
-        .subtitle {
-            text-align: center;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--premium-gold);
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
-
-        .status-badge {
-            font-size: 9px;
-            text-align: center;
-            padding: 5px;
-            border-radius: 20px;
-            background: #f0f4f8;
-            margin-bottom: 20px;
-            color: var(--premium-accent);
-        }
-
-        .input-group { margin-bottom: 18px; }
-        
-        label { 
-            display: block; 
-            font-size: 11px; 
-            font-weight: 600; 
-            margin-bottom: 8px; 
-            margin-left: 5px;
-            color: #718096;
-            text-transform: uppercase;
-        }
-
+        label { display: block; font-size: 12px; font-weight: 600; margin: 12px 0 6px 4px; color: #4A5568; text-transform: uppercase; }
         input, select {
-            width: 100%;
-            padding: 15px;
-            border: 1.5px solid #edf2f7;
-            border-radius: 15px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 15px;
-            background: #fcfcfd;
-            transition: all 0.3s ease;
+            width: 100%; padding: 14px; border: 2px solid #EDF2F7; border-radius: 14px;
+            font-size: 15px; background: #F8FAFC; color: var(--p-dark);
+        }
+        input:focus { border-color: var(--p-blue); outline: none; background: #FFF; }
+
+        .btn-main {
+            background: var(--p-blue); color: white; border: none; padding: 18px;
+            width: 100%; border-radius: 16px; font-size: 16px; font-weight: 600;
+            margin-top: 20px; cursor: pointer; box-shadow: 0 4px 12px rgba(44,82,130,0.3);
         }
 
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--premium-accent);
-            background: var(--white);
+        /* Секция Истории */
+        .history-section { margin-top: 35px; }
+        .history-title { font-size: 14px; font-weight: 600; border-bottom: 2px solid var(--p-gold); display: inline-block; margin-bottom: 15px; }
+        
+        .history-card {
+            background: #F8FAFC; border-left: 5px solid var(--p-blue);
+            padding: 12px; border-radius: 12px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 13px; cursor: pointer; transition: 0.2s;
         }
+        .history-card:active { background: #EDF2F7; }
+        .h-info b { display: block; font-size: 14px; }
+        .h-info span { color: #718096; font-size: 11px; }
+        .h-amount { text-align: right; font-weight: 600; }
+        .amt-pos { color: #2F855A; }
+        .amt-neg { color: #C53030; }
 
-        .btn-send {
-            background: linear-gradient(135deg, var(--premium-dark) 0%, var(--premium-accent) 100%);
-            color: var(--white);
-            border: none;
-            padding: 18px;
-            width: 100%;
-            border-radius: 15px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 0 10px 20px rgba(44, 82, 130, 0.2);
-            transition: transform 0.2s;
-        }
-
-        .btn-send:active { transform: scale(0.98); }
-
-        .btn-sync {
-            background: none;
-            border: 1.5px solid #e2e8f0;
-            color: #a0aec0;
-            padding: 12px;
-            width: 100%;
-            border-radius: 12px;
-            font-size: 12px;
-            margin-top: 25px;
-            cursor: pointer;
-        }
-
-        .divider {
-            height: 1px;
-            background: #edf2f7;
-            margin: 25px 0;
-        }
+        #status { font-size: 10px; text-align: center; margin-bottom: 15px; font-weight: 600; color: var(--p-blue); }
     </style>
 </head>
 <body onload="init()">
 
 <div class="app-container">
-    <div class="status-badge" id="cloud-status">СИНХРОНИЗАЦИЯ: READY</div>
+    <div id="status">СИСТЕМА ГОТОВА</div>
     <h1>Волга.Аренда</h1>
-    <div class="subtitle">Management & Lifestyle</div>
+    <div class="subtitle">ESTATE MANAGEMENT</div>
 
-    <div class="input-group">
-        <label>Объект недвижимости</label>
-        <select id="f-obj">
+    <input type="hidden" id="f-id"> <!-- Скрытое поле для ID (редактирование) -->
+
+    <label>Объект и Дата</label>
+    <div style="display: flex; gap: 8px;">
+        <select id="f-obj" style="flex: 2;">
             <option value="Берег Волги">🌊 Берег Волги</option>
             <option value="Санторини">🏛️ Санторини</option>
         </select>
+        <input type="date" id="f-date" style="flex: 2;">
     </div>
 
-    <div style="display: flex; gap: 10px;">
-        <div class="input-group" style="flex: 2;">
-            <label>Дата</label>
-            <input type="date" id="f-date">
-        </div>
-        <div class="input-group" style="flex: 1;">
-            <label>Сутки</label>
-            <input type="number" id="f-days" value="1">
-        </div>
-    </div>
+    <label>Детали (Гость / Расход)</label>
+    <input type="text" id="f-desc" placeholder="Имя гостя или название магазина">
 
-    <div class="input-group">
-        <label>Детализация (гость / магазин / работа)</label>
-        <input type="text" id="f-desc" placeholder="Например: Семья из Москвы">
-    </div>
-
-    <div style="display: flex; gap: 10px;">
-        <div class="input-group" style="flex: 1;">
+    <div style="display: flex; gap: 8px;">
+        <div style="flex: 1;">
             <label>Сумма ₽</label>
             <input type="number" id="f-sum" placeholder="0">
         </div>
-        <div class="input-group" style="flex: 1;">
-            <label>Тип</label>
-            <select id="f-type">
-                <option value="Доход">💰 Доход</option>
-                <option value="Расход">📉 Расход</option>
+        <div style="flex: 1;">
+            <label>Категория</label>
+            <select id="f-cat">
+                <option value="Аренда">🛌 Аренда</option>
+                <option value="Переменные">🧼 Переменные</option>
+                <option value="Опт/Склад">📦 Опт/Склад</option>
+                <option value="Постоянные">💡 Постоянные</option>
+                <option value="Комиссия">🧧 Комиссия</option>
             </select>
         </div>
     </div>
 
-    <div class="input-group">
-        <label>Категория учета</label>
-        <select id="f-cat">
-            <option value="Аренда">🛌 Аренда</option>
-            <option value="Переменные">🧼 Переменные</option>
-            <option value="Опт/Склад">📦 Опт/Склад</option>
-            <option value="Постоянные">💡 Постоянные</option>
-            <option value="Комиссия">🧧 Комиссия</option>
-        </select>
+    <label>Тип операции</label>
+    <select id="f-type">
+        <option value="Доход">📈 ДОХОД (Поступление)</option>
+        <option value="Расход">📉 РАСХОД (Трата)</option>
+    </select>
+
+    <button class="btn-main" id="save-btn" onclick="sendToCloud()">ЗАПИСАТЬ В ТАБЛИЦУ</button>
+
+    <div class="history-section">
+        <div class="history-title">ПОСЛЕДНИЕ ЗАПИСИ (из памяти)</div>
+        <div id="history-list">
+            <!-- Сюда будут падать записи -->
+        </div>
     </div>
-
-    <button class="btn-send" onclick="sendToCloud()">ЗАПИСАТЬ В ОБЛАКО</button>
-
-    <div class="divider"></div>
-    <button class="btn-sync" onclick="syncOldData()">СИНХРОНИЗИРОВАТЬ ИСТОРИЮ</button>
 </div>
 
 <script>
-    // СЮДА ВСТАВИТЬ ВАШУ ССЫЛКУ ИЗ ГУГЛ ТАБЛИЦ (Web App URL)
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwCZrjMcQKeASCzM2eIqDpyN87ANWDxoEliBFONu49IsxisWRKwtUJGXDpoax1dD4Y/exec';
 
     function init() {
         document.getElementById('f-date').valueAsDate = new Date();
+        renderHistory();
     }
 
     async function sendToCloud() {
-        const status = document.getElementById('cloud-status');
+        const btn = document.getElementById('save-btn');
+        const status = document.getElementById('status');
+        
         const data = {
+            id: document.getElementById('f-id').value || Date.now(),
             date: document.getElementById('f-date').value,
             obj: document.getElementById('f-obj').value,
             desc: document.getElementById('f-desc').value,
             sum: document.getElementById('f-sum').value,
             type: document.getElementById('f-type').value,
-            cat: document.getElementById('f-cat').value,
-            days: document.getElementById('f-days').value
+            cat: document.getElementById('f-cat').value
         };
 
         if(!data.sum || !data.desc) { alert('Заполните сумму и описание'); return; }
 
-        status.innerText = 'ОТПРАВКА...';
-        status.style.background = '#feebc8';
+        btn.disabled = true;
+        status.innerText = 'ОТПРАВКА В ГУГЛ ТАБЛИЦЫ...';
 
         try {
             await fetch(WEB_APP_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
             });
+
+            // Сохраняем локально для истории
+            saveLocally(data);
             
-            status.innerText = 'УСПЕШНО ЗАПИСАНО';
-            status.style.background = '#c6f6d5';
-            
-            // Сохраняем локально на всякий случай
-            let history = JSON.parse(localStorage.getItem('rent_v6_data') || '[]');
-            history.push(data);
-            localStorage.setItem('rent_v6_data', JSON.stringify(history));
-            
-            document.getElementById('f-sum').value = '';
-            document.getElementById('f-desc').value = '';
+            status.innerText = 'УСПЕШНО СОХРАНЕНО';
+            resetForm();
+            renderHistory();
         } catch (e) {
-            status.innerText = 'ОШИБКА СЕТИ';
-            status.style.background = '#fed7d7';
+            status.innerText = 'ОШИБКА СЕТИ, НО СОХРАНЕНО ЛОКАЛЬНО';
+            saveLocally(data);
+            renderHistory();
+        } finally {
+            btn.disabled = false;
         }
     }
 
-    async function syncOldData() {
-        let history = JSON.parse(localStorage.getItem('rent_v6_data') || '[]');
-        if (history.length === 0) { alert('Истории для отправки нет'); return; }
+    function saveLocally(newItem) {
+        let history = JSON.parse(localStorage.getItem('rent_history_v6.1') || '[]');
+        const index = history.findIndex(item => item.id == newItem.id);
         
-        const status = document.getElementById('cloud-status');
-        status.innerText = 'СИНХРОНИЗАЦИЯ ' + history.length + ' ЗАПИСЕЙ...';
+        if(index > -1) history[index] = newItem; // Если редактируем
+        else history.unshift(newItem); // Если новая запись
         
-        for (let item of history) {
-            await fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(item)
-            });
-        }
+        localStorage.setItem('rent_history_v6.1', JSON.stringify(history.slice(0, 15)));
+    }
+
+    function renderHistory() {
+        const list = document.getElementById('history-list');
+        const history = JSON.parse(localStorage.getItem('rent_history_v6.1') || '[]');
+        list.innerHTML = history.length ? '' : '<p style="font-size:12px; color:#A0AEC0;">Записей пока нет</p>';
         
-        alert('Все данные успешно перенесены в таблицу!');
-        status.innerText = 'ОБЛАКО ОБНОВЛЕНО';
+        history.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'history-card';
+            card.onclick = () => editItem(item.id);
+            
+            const isInc = item.type === 'Доход';
+            card.innerHTML = `
+                <div class="h-info">
+                    <b>${item.desc}</b>
+                    <span>${item.obj} • ${item.date}</span>
+                </div>
+                <div class="h-amount ${isInc ? 'amt-pos' : 'amt-neg'}">
+                    ${isInc ? '+' : '-'}${item.sum} ₽
+                    <div style="font-size:10px; font-weight:400; color:#718096;">${item.cat}</div>
+                </div>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    function editItem(id) {
+        const history = JSON.parse(localStorage.getItem('rent_history_v6.1') || '[]');
+        const item = history.find(i => i.id == id);
+        if(!item) return;
+
+        document.getElementById('f-id').value = item.id;
+        document.getElementById('f-date').value = item.date;
+        document.getElementById('f-obj').value = item.obj;
+        document.getElementById('f-desc').value = item.desc;
+        document.getElementById('f-sum').value = item.sum;
+        document.getElementById('f-type').value = item.type;
+        document.getElementById('f-cat').value = item.cat;
+        
+        document.getElementById('save-btn').innerText = 'ОБНОВИТЬ ЗАПИСЬ';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetForm() {
+        document.getElementById('f-id').value = '';
+        document.getElementById('f-desc').value = '';
+        document.getElementById('f-sum').value = '';
+        document.getElementById('save-btn').innerText = 'ЗАПИСАТЬ В ТАБЛИЦУ';
     }
 </script>
 
