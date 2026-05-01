@@ -3,154 +3,260 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Волга.Аренда CLOUD</title>
+    <title>Волга.Аренда Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --main: #4a67d6; --income: #22c55e; --expense: #ef4444; --dark: #1e293b; }
-        * { box-sizing: border-box; font-family: -apple-system, sans-serif; }
-        body { margin: 0; padding: 15px; background: #f0f2f5; }
-        .app { background: white; border-radius: 30px; max-width: 450px; margin: auto; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .status-cloud { font-size: 10px; text-align: center; margin-bottom: 10px; color: #64748b; font-weight: bold; }
+        :root {
+            --premium-dark: #1a2a3a;
+            --premium-gold: #c5a059;
+            --premium-bg: #f8f7f5; /* Благородный Greige */
+            --premium-accent: #2c5282; /* Цвет глубокого моря */
+            --success: #48bb78;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        input, select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 12px; border: 1.5px solid #eee; outline: none; background: #f8fafc; }
-        .btn-main { background: var(--main); color: white; border: none; padding: 16px; border-radius: 15px; font-weight: 800; width: 100%; cursor: pointer; }
+        body { 
+            margin: 0; 
+            padding: 20px 15px; 
+            background-color: var(--premium-bg); 
+            font-family: 'Montserrat', sans-serif;
+            color: var(--premium-dark);
+        }
+
+        .app-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 30px 25px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+
+        h1 { 
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            text-align: center;
+            margin: 0 0 5px 0;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--premium-gold);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            font-size: 9px;
+            text-align: center;
+            padding: 5px;
+            border-radius: 20px;
+            background: #f0f4f8;
+            margin-bottom: 20px;
+            color: var(--premium-accent);
+        }
+
+        .input-group { margin-bottom: 18px; }
         
-        .card { background: white; border-radius: 18px; padding: 15px; margin-bottom: 10px; border-left: 6px solid var(--income); box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
-        .card.is-expense { border-left-color: var(--expense); }
+        label { 
+            display: block; 
+            font-size: 11px; 
+            font-weight: 600; 
+            margin-bottom: 8px; 
+            margin-left: 5px;
+            color: #718096;
+            text-transform: uppercase;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 1.5px solid #edf2f7;
+            border-radius: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            background: #fcfcfd;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--premium-accent);
+            background: var(--white);
+        }
+
+        .btn-send {
+            background: linear-gradient(135deg, var(--premium-dark) 0%, var(--premium-accent) 100%);
+            color: var(--white);
+            border: none;
+            padding: 18px;
+            width: 100%;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(44, 82, 130, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .btn-send:active { transform: scale(0.98); }
+
+        .btn-sync {
+            background: none;
+            border: 1.5px solid #e2e8f0;
+            color: #a0aec0;
+            padding: 12px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-top: 25px;
+            cursor: pointer;
+        }
+
+        .divider {
+            height: 1px;
+            background: #edf2f7;
+            margin: 25px 0;
+        }
     </style>
 </head>
 <body onload="init()">
 
-<div class="app">
-    <div class="status-cloud" id="cloud-status">☁️ Подключение к таблице...</div>
-    
-    <div style="text-align:center; margin-bottom: 20px;">
-        <h1 style="font-size: 20px; margin:0;">Волга.Аренда 6.0</h1>
-        <small style="color: var(--main); font-weight: bold;">ОБЛАЧНЫЙ УЧЁТ</small>
-    </div>
+<div class="app-container">
+    <div class="status-badge" id="cloud-status">СИНХРОНИЗАЦИЯ: READY</div>
+    <h1>Волга.Аренда</h1>
+    <div class="subtitle">Management & Lifestyle</div>
 
     <div class="input-group">
+        <label>Объект недвижимости</label>
         <select id="f-obj">
             <option value="Берег Волги">🌊 Берег Волги</option>
             <option value="Санторини">🏛️ Санторини</option>
         </select>
-        <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:8px;">
-            <input type="date" id="f-date">
-            <input type="number" id="f-ppl" placeholder="Гостей" value="1">
-        </div>
-        <input type="text" id="f-name" placeholder="Описание (напр. Проживание)">
-        <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:8px;">
-            <input type="number" id="f-price" placeholder="Сумма ₽">
-            <input type="text" id="f-store" placeholder="Имя гостя">
-        </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-            <select id="f-cat">
-                <option value="🛌 Аренда">🛌 Аренда</option>
-                <option value="🧼 Переменные">🧼 Переменные</option>
-                <option value="📦 Опт">📦 Опт/Склад</option>
-                <option value="💡 Постоянные">💡 Постоянные</option>
-                <option value="🧧 Комиссия">🧧 Комиссия</option>
-            </select>
-            <select id="f-type">
-                <option value="💰 Доход">💰 Доход</option>
-                <option value="💸 Расход">💸 Расход</option>
-            </select>
-        </div>
-        <button onclick="save()" id="btn-save" class="btn-main">ЗАПИСАТЬ В ОБЛАКО</button>
     </div>
 
-    <div id="list" style="margin-top: 25px;"></div>
+    <div style="display: flex; gap: 10px;">
+        <div class="input-group" style="flex: 2;">
+            <label>Дата</label>
+            <input type="date" id="f-date">
+        </div>
+        <div class="input-group" style="flex: 1;">
+            <label>Сутки</label>
+            <input type="number" id="f-days" value="1">
+        </div>
+    </div>
 
-    <hr style="margin: 20px 0; border: 0; border-top: 1px dashed #ccc;">
-    <button onclick="syncToCloud()" id="sync-btn" style="width:100%; padding:10px; background:#22c55e; color:white; border:none; border-radius:10px; font-size:11px; font-weight:bold;">ОТПРАВИТЬ СТАРЫЕ ДАННЫЕ В ТАБЛИЦУ</button>
+    <div class="input-group">
+        <label>Детализация (гость / магазин / работа)</label>
+        <input type="text" id="f-desc" placeholder="Например: Семья из Москвы">
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+        <div class="input-group" style="flex: 1;">
+            <label>Сумма ₽</label>
+            <input type="number" id="f-sum" placeholder="0">
+        </div>
+        <div class="input-group" style="flex: 1;">
+            <label>Тип</label>
+            <select id="f-type">
+                <option value="Доход">💰 Доход</option>
+                <option value="Расход">📉 Расход</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <label>Категория учета</label>
+        <select id="f-cat">
+            <option value="Аренда">🛌 Аренда</option>
+            <option value="Переменные">🧼 Переменные</option>
+            <option value="Опт/Склад">📦 Опт/Склад</option>
+            <option value="Постоянные">💡 Постоянные</option>
+            <option value="Комиссия">🧧 Комиссия</option>
+        </select>
+    </div>
+
+    <button class="btn-send" onclick="sendToCloud()">ЗАПИСАТЬ В ОБЛАКО</button>
+
+    <div class="divider"></div>
+    <button class="btn-sync" onclick="syncOldData()">СИНХРОНИЗИРОВАТЬ ИСТОРИЮ</button>
 </div>
 
 <script>
-    // ВСТАВЬТЕ СЮДА ССЫЛКУ ИМЕННО ОТ ТАБЛИЦЫ АРЕНДЫ
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwCZrjMcQKeASCzM2eIqDpyN87ANWDxoEliBFONu49IsxisWRKwtUJGXDpoax1dD4Y/exec'; 
+    // СЮДА ВСТАВИТЬ ВАШУ ССЫЛКУ ИЗ ГУГЛ ТАБЛИЦ (Web App URL)
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwCZrjMcQKeASCzM2eIqDpyN87ANWDxoEliBFONu49IsxisWRKwtUJGXDpoax1dD4Y/exec';
 
-    let db = JSON.parse(localStorage.getItem('volga_rent_data')) || [];
-
-    async function init() {
-        document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
-        if (!WEB_APP_URL.includes('ВАША_НОВАЯ_ССЫЛКА')) {
-            await loadFromCloud();
-        }
-        render();
+    function init() {
+        document.getElementById('f-date').valueAsDate = new Date();
     }
 
-    async function save() {
-        const entry = {
-            id: Date.now().toString(),
+    async function sendToCloud() {
+        const status = document.getElementById('cloud-status');
+        const data = {
+            date: document.getElementById('f-date').value,
             obj: document.getElementById('f-obj').value,
-            d: document.getElementById('f-date').value,
-            n: document.getElementById('f-name').value,
-            p: document.getElementById('f-price').value,
-            ppl: document.getElementById('f-ppl').value,
-            s: document.getElementById('f-store').value,
-            t: document.getElementById('f-type').value,
-            cat: document.getElementById('f-cat').value
+            desc: document.getElementById('f-desc').value,
+            sum: document.getElementById('f-sum').value,
+            type: document.getElementById('f-type').value,
+            cat: document.getElementById('f-cat').value,
+            days: document.getElementById('f-days').value
         };
 
-        if(!entry.n || !entry.p) return alert("Заполните данные!");
+        if(!data.sum || !data.desc) { alert('Заполните сумму и описание'); return; }
 
-        document.getElementById('cloud-status').innerText = "⏳ Сохранение...";
+        status.innerText = 'ОТПРАВКА...';
+        status.style.background = '#feebc8';
+
         try {
-            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(entry) });
-            db.unshift(entry);
-            localStorage.setItem('volga_rent_data', JSON.stringify(db));
-            document.getElementById('cloud-status').innerText = "✅ Сохранено в Google";
-            render();
-            // Очистка полей
-            document.getElementById('f-name').value = "";
-            document.getElementById('f-price').value = "";
-            document.getElementById('f-store').value = "";
-        } catch (e) { alert("Ошибка сети!"); }
-    }
-
-    async function loadFromCloud() {
-        document.getElementById('cloud-status').innerText = "⏳ Загрузка истории...";
-        try {
-            const res = await fetch(WEB_APP_URL);
-            const data = await res.json();
-            if(data.length > 0) {
-                db = data.reverse();
-                localStorage.setItem('volga_rent_data', JSON.stringify(db));
-                document.getElementById('cloud-status').innerText = "☁️ Синхронизировано";
-            }
-        } catch (e) { document.getElementById('cloud-status').innerText = "⚠️ Оффлайн режим"; }
-    }
-
-    async function syncToCloud() {
-        if(!confirm("Перенести старые записи из памяти телефона в таблицу?")) return;
-        const btn = document.getElementById('sync-btn');
-        btn.innerText = "ПЕРЕНОС...";
-        for(let item of db) {
-            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(item) });
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            
+            status.innerText = 'УСПЕШНО ЗАПИСАНО';
+            status.style.background = '#c6f6d5';
+            
+            // Сохраняем локально на всякий случай
+            let history = JSON.parse(localStorage.getItem('rent_v6_data') || '[]');
+            history.push(data);
+            localStorage.setItem('rent_v6_data', JSON.stringify(history));
+            
+            document.getElementById('f-sum').value = '';
+            document.getElementById('f-desc').value = '';
+        } catch (e) {
+            status.innerText = 'ОШИБКА СЕТИ';
+            status.style.background = '#fed7d7';
         }
-        alert("Готово! Все данные теперь в Google Таблице.");
-        btn.style.display = "none";
-        loadFromCloud();
     }
 
-    function render() {
-        const list = document.getElementById('list');
-        list.innerHTML = "";
-        db.forEach(i => {
-            const isExp = i.t && i.t.includes('Расход');
-            list.innerHTML += `
-                <div class="card ${isExp?'is-expense':''}">
-                    <div>
-                        <div style="font-size:9px; color:#64748b; font-weight:800;">${i.d} • ${i.obj}</div>
-                        <div style="font-weight:bold; font-size:14px;">${i.n}</div>
-                        <div style="font-size:11px; color:#64748b;">${i.cat} ${i.s ? '— '+i.s : ''}</div>
-                    </div>
-                    <div style="text-align:right; font-weight:800; color:${isExp?'var(--expense)':'var(--income)'}">
-                        ${isExp?'-':''}${Number(i.p).toLocaleString()} ₽
-                        <div style="font-size:10px; font-weight:normal; color:#94a3b8;">${i.ppl} чел.</div>
-                    </div>
-                </div>`;
-        });
+    async function syncOldData() {
+        let history = JSON.parse(localStorage.getItem('rent_v6_data') || '[]');
+        if (history.length === 0) { alert('Истории для отправки нет'); return; }
+        
+        const status = document.getElementById('cloud-status');
+        status.innerText = 'СИНХРОНИЗАЦИЯ ' + history.length + ' ЗАПИСЕЙ...';
+        
+        for (let item of history) {
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(item)
+            });
+        }
+        
+        alert('Все данные успешно перенесены в таблицу!');
+        status.innerText = 'ОБЛАКО ОБНОВЛЕНО';
     }
 </script>
+
 </body>
 </html>
