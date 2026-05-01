@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Волга.Аренда CLOUD</title>
+    <style>
+        :root { --main: #4a67d6; --income: #22c55e; --expense: #ef4444; --dark: #1e293b; }
+        * { box-sizing: border-box; font-family: -apple-system, sans-serif; }
+        body { margin: 0; padding: 15px; background: #f0f2f5; }
+        .app { background: white; border-radius: 30px; max-width: 450px; margin: auto; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .status-cloud { font-size: 10px; text-align: center; margin-bottom: 10px; color: #64748b; font-weight: bold; }
+        
+        input, select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 12px; border: 1.5px solid #eee; outline: none; background: #f8fafc; }
+        .btn-main { background: var(--main); color: white; border: none; padding: 16px; border-radius: 15px; font-weight: 800; width: 100%; cursor: pointer; }
+        
+        .card { background: white; border-radius: 18px; padding: 15px; margin-bottom: 10px; border-left: 6px solid var(--income); box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .card.is-expense { border-left-color: var(--expense); }
+    </style>
+</head>
+<body onload="init()">
+
+<div class="app">
+    <div class="status-cloud" id="cloud-status">☁️ Подключение к таблице...</div>
+    
+    <div style="text-align:center; margin-bottom: 20px;">
+        <h1 style="font-size: 20px; margin:0;">Волга.Аренда 6.0</h1>
+        <small style="color: var(--main); font-weight: bold;">ОБЛАЧНЫЙ УЧЁТ</small>
+    </div>
+
+    <div class="input-group">
+        <select id="f-obj">
+            <option value="Берег Волги">🌊 Берег Волги</option>
+            <option value="Санторини">🏛️ Санторини</option>
+        </select>
+        <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:8px;">
+            <input type="date" id="f-date">
+            <input type="number" id="f-ppl" placeholder="Гостей" value="1">
+        </div>
+        <input type="text" id="f-name" placeholder="Описание (напр. Проживание)">
+        <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:8px;">
+            <input type="number" id="f-price" placeholder="Сумма ₽">
+            <input type="text" id="f-store" placeholder="Имя гостя">
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+            <select id="f-cat">
+                <option value="🛌 Аренда">🛌 Аренда</option>
+                <option value="🧼 Переменные">🧼 Переменные</option>
+                <option value="📦 Опт">📦 Опт/Склад</option>
+                <option value="💡 Постоянные">💡 Постоянные</option>
+                <option value="🧧 Комиссия">🧧 Комиссия</option>
+            </select>
+            <select id="f-type">
+                <option value="💰 Доход">💰 Доход</option>
+                <option value="💸 Расход">💸 Расход</option>
+            </select>
+        </div>
+        <button onclick="save()" id="btn-save" class="btn-main">ЗАПИСАТЬ В ОБЛАКО</button>
+    </div>
+
+    <div id="list" style="margin-top: 25px;"></div>
+
+    <hr style="margin: 20px 0; border: 0; border-top: 1px dashed #ccc;">
+    <button onclick="syncToCloud()" id="sync-btn" style="width:100%; padding:10px; background:#22c55e; color:white; border:none; border-radius:10px; font-size:11px; font-weight:bold;">ОТПРАВИТЬ СТАРЫЕ ДАННЫЕ В ТАБЛИЦУ</button>
+</div>
+
+<script>
+    // ВСТАВЬТЕ СЮДА ССЫЛКУ ИМЕННО ОТ ТАБЛИЦЫ АРЕНДЫ
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwCZrjMcQKeASCzM2eIqDpyN87ANWDxoEliBFONu49IsxisWRKwtUJGXDpoax1dD4Y/exec'; 
+
+    let db = JSON.parse(localStorage.getItem('volga_rent_data')) || [];
+
+    async function init() {
+        document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+        if (!WEB_APP_URL.includes('ВАША_НОВАЯ_ССЫЛКА')) {
+            await loadFromCloud();
+        }
+        render();
+    }
+
+    async function save() {
+        const entry = {
+            id: Date.now().toString(),
+            obj: document.getElementById('f-obj').value,
+            d: document.getElementById('f-date').value,
+            n: document.getElementById('f-name').value,
+            p: document.getElementById('f-price').value,
+            ppl: document.getElementById('f-ppl').value,
+            s: document.getElementById('f-store').value,
+            t: document.getElementById('f-type').value,
+            cat: document.getElementById('f-cat').value
+        };
+
+        if(!entry.n || !entry.p) return alert("Заполните данные!");
+
+        document.getElementById('cloud-status').innerText = "⏳ Сохранение...";
+        try {
+            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(entry) });
+            db.unshift(entry);
+            localStorage.setItem('volga_rent_data', JSON.stringify(db));
+            document.getElementById('cloud-status').innerText = "✅ Сохранено в Google";
+            render();
+            // Очистка полей
+            document.getElementById('f-name').value = "";
+            document.getElementById('f-price').value = "";
+            document.getElementById('f-store').value = "";
+        } catch (e) { alert("Ошибка сети!"); }
+    }
+
+    async function loadFromCloud() {
+        document.getElementById('cloud-status').innerText = "⏳ Загрузка истории...";
+        try {
+            const res = await fetch(WEB_APP_URL);
+            const data = await res.json();
+            if(data.length > 0) {
+                db = data.reverse();
+                localStorage.setItem('volga_rent_data', JSON.stringify(db));
+                document.getElementById('cloud-status').innerText = "☁️ Синхронизировано";
+            }
+        } catch (e) { document.getElementById('cloud-status').innerText = "⚠️ Оффлайн режим"; }
+    }
+
+    async function syncToCloud() {
+        if(!confirm("Перенести старые записи из памяти телефона в таблицу?")) return;
+        const btn = document.getElementById('sync-btn');
+        btn.innerText = "ПЕРЕНОС...";
+        for(let item of db) {
+            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(item) });
+        }
+        alert("Готово! Все данные теперь в Google Таблице.");
+        btn.style.display = "none";
+        loadFromCloud();
+    }
+
+    function render() {
+        const list = document.getElementById('list');
+        list.innerHTML = "";
+        db.forEach(i => {
+            const isExp = i.t && i.t.includes('Расход');
+            list.innerHTML += `
+                <div class="card ${isExp?'is-expense':''}">
+                    <div>
+                        <div style="font-size:9px; color:#64748b; font-weight:800;">${i.d} • ${i.obj}</div>
+                        <div style="font-weight:bold; font-size:14px;">${i.n}</div>
+                        <div style="font-size:11px; color:#64748b;">${i.cat} ${i.s ? '— '+i.s : ''}</div>
+                    </div>
+                    <div style="text-align:right; font-weight:800; color:${isExp?'var(--expense)':'var(--income)'}">
+                        ${isExp?'-':''}${Number(i.p).toLocaleString()} ₽
+                        <div style="font-size:10px; font-weight:normal; color:#94a3b8;">${i.ppl} чел.</div>
+                    </div>
+                </div>`;
+        });
+    }
+</script>
+</body>
+</html>
